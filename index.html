@@ -1,0 +1,2129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>성신여대 카페 메뉴 가격 비교</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      background: #ffffff;
+      background-image: url('https://imgur.com/m5qbS1E.png');
+      background-repeat: no-repeat;
+      background-size: 200px auto;
+      background-position: right 70px top 230px;
+      background-attachment: fixed;
+      background-attachment: scroll;
+      
+
+    }
+    h1 {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 999;
+      text-align: center;
+      margin: 0;
+      padding: 20px 0;
+      background: #e5d6ee;
+      box-shadow: 0 1px 5px rgba(0,0,0,0.1);
+    }
+    #homeBtn {
+      position: fixed;
+      top: 20px;
+      left: 110px;
+      font-size: 24px;
+      background: none;
+      border: none;
+      color: #9f5fdb;
+      cursor: pointer;
+      display: none;
+      z-index: 1000;
+    }
+    #sortBar {
+      position: fixed;
+      top: 40px;
+      right: 70px;
+      z-index: 1000;
+      display: none;
+    }
+    .menu-blocks {
+      
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      gap: 20px;
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 20px;
+      margin-top: 100px;
+    }
+    .menu-block {
+      background: white;
+      padding: 30px 40px;
+      font-size: 18px;
+      font-weight: 500;
+      border-radius: 12px;
+      border: 1px solid #ddd;
+      cursor: pointer;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      transition: 0.2s ease;
+    }
+    .menu-block:hover {
+      background: #9b70d9;
+      color: white;
+      border-color: #9b70d9;
+    }
+    .menu-bar {
+      display: none;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 110px 10px 25px;
+    }
+    .menu-small-btn {
+      padding: 8px 14px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 20px;
+      background: white;
+      cursor: pointer;
+    }
+    .menu-small-btn:hover {
+      background: #9c65f4;
+      color: white;
+    }
+    .cafe-card {
+      background: white;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 700px;
+    }
+    .cafe-name {
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .price {
+      margin-top: 5px;
+      font-size: 15px;
+    }
+    .link {
+      display: inline-block;
+      margin-top: 10px;
+      color: #8132ff;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    .link:hover {
+      text-decoration: underline;
+    }
+    .fixed-image {
+      position: fixed;
+      left: 100px;
+      top: 150px;
+      width: 120px;
+      height: auto;
+      max-width: none;
+      z-index: 999;
+    } 
+    
+  </style>
+
+  <style>
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 20px;
+        padding: 15px 0;
+      }
+
+      #homeBtn {
+        font-size: 20px;
+        left: 20px;
+      }
+
+      #sortBar {
+        top: 60px;
+        right: 20px;
+      }
+
+      .menu-blocks {
+        gap: 15px;
+        padding: 10px;
+      }
+
+      .menu-block {
+        padding: 20px 20px;
+        font-size: 16px;
+      }
+
+      .menu-bar {
+        margin: 90px 5px 15px;
+        gap: 8px;
+      }
+
+      .menu-small-btn {
+        font-size: 14px;
+        padding: 6px 10px;
+      }
+
+      .fixed-image {
+        display: none;
+      }
+
+      .cafe-card {
+        padding: 15px;
+        margin: 15px 10px;
+      }
+    }
+  </style>
+
+</head>
+<body>
+  <h1>카성비(카페 성신 비교)</h1>
+  <button id="homeBtn" onclick="goHome()">◀</button>
+
+  <div id="sortBar">
+    <select id="sortSelect" onchange="applySort()">
+      <option value="default">정렬 기준 선택</option>
+      <option value="priceAsc">가격 낮은 순</option>
+      <option value="priceDesc">가격 높은 순</option>
+      <option value="name">가나다순</option>
+    </select>
+  </div>
+  
+
+  <div id="menuGrid" class="menu-blocks">
+    <div class="menu-block" onclick="startWithMenu('아메리카노')">아메리카노</div>
+    <div class="menu-block" onclick="startWithMenu('카페라떼')">카페라떼</div>
+    <div class="menu-block" onclick="startWithMenu('바닐라라떼')">바닐라라떼</div>
+    <div class="menu-block" onclick="startWithMenu('딸기라떼')">딸기라떼</div>
+    <div class="menu-block" onclick="startWithMenu('초코라떼')">초코라떼</div>
+    <div class="menu-block" onclick="startWithMenu('아이스티')">아이스티</div>
+    <div class="menu-block" onclick="startWithMenu('요거트스무디')">요거트스무디</div>
+    <div class="menu-block" onclick="startWithMenu('치즈케이크')">치즈케이크</div>
+    <div class="menu-block" onclick="startWithMenu('소금빵')">소금빵</div>
+  </div>
+
+  <img src="https://imgur.com/dIH1Rgc.png" class="fixed-image">
+
+
+  <div id="menuBar" class="menu-bar">
+    <button class="menu-small-btn" onclick="startWithMenu('아메리카노')">아메리카노</button>
+    <button class="menu-small-btn" onclick="startWithMenu('카페라떼')">카페라떼</button>
+    <button class="menu-small-btn" onclick="startWithMenu('바닐라라떼')">바닐라라떼</button>
+    <button class="menu-small-btn" onclick="startWithMenu('딸기라떼')">딸기라떼</button>
+    <button class="menu-small-btn" onclick="startWithMenu('초코라떼')">초코라떼</button>
+    <button class="menu-small-btn" onclick="startWithMenu('아이스티')">아이스티</button>
+    <button class="menu-small-btn" onclick="startWithMenu('요거트스무디')">요거트스무디</button>
+    <button class="menu-small-btn" onclick="startWithMenu('치즈케이크')">치즈케이크</button>
+    <button class="menu-small-btn" onclick="startWithMenu('소금빵')">소금빵</button>
+  </div>
+
+  <div id="result-container" style="display: none;"></div>
+
+  <script>
+    const cafesRaw = [
+  {
+    "brand": "이디야커피",
+    "mapUrl": "https://map.naver.com/p/search/%EC%9D%B4%EB%94%94%EC%95%BC%EC%BB%A4%ED%94%BC?c=14.35,0,0,0,dh",
+    "menu": {
+      "(L)아메리카노(HOT&ICED)": {
+        "price": 3200,
+        "category": "아메리카노"
+      },
+      "(EX)아메리카노(HOT&ICED)": {
+        "price": 4200,
+        "category": "아메리카노"
+      },
+      "(L)카페라떼(HOT&ICED)": {
+        "price": 4200,
+        "category": "카페라떼"
+      },
+      "(EX)카페라떼(HOT&ICED)": {
+        "price": 5400,
+        "category": "카페라떼"
+      },
+      "(L)카페모카(HOT&ICED)": {
+        "price": 4500,
+        "category": "기타"
+      },
+      "(EX)카페모카(HOT&ICED)": {
+        "price": 5700,
+        "category": "기타"
+      },
+      "(L)카라멜 마끼아또(HOT&ICED)": {
+        "price": 4500,
+        "category": "기타"
+      },
+      "(EX)카라멜 마끼아또(HOT&ICED)": {
+        "price": 5700,
+        "category": "기타"
+      },
+      "(L)바닐라라떼(HOT&ICED)": {
+        "price": 4500,
+        "category": "바닐라라떼"
+      },
+      "(EX)바닐라라떼(HOT&ICED)": {
+        "price": 5700,
+        "category": "바닐라라떼"
+      },
+      "(R) 복숭아 아이스티": {
+        "price": 2900,
+        "category": "아이스티"
+      },
+      "(EX) 복숭아 아이스티": {
+        "price": 3900,
+        "category": "아이스티"
+      },
+      "소금빵": {
+        "price": 3000,
+        "category": "소금빵"
+      },
+      "수플레 치즈 조각 케익": {
+        "price": 4900,
+        "category": "기타"
+      },
+      "(R)초콜릿(초코라떼)": {
+        "price": 3900,
+        "category": "초코라떼"
+      },
+      "(EX)초콜릿(초코라떼)": {
+        "price": 5100,
+        "category": "초코라떼"
+      },
+      "(R)딸기 듬뿍 라떼": {
+        "price": 4200,
+        "category": "딸기라떼"
+      },
+      "(EX)딸기 듬뿍 라떼": {
+        "price": 5600,
+        "category": "딸기라떼"
+      },
+      "오리진 쉐이크": {
+        "price": 4700,
+        "category": "기타"
+      }
+    }
+  },
+  {
+    "brand": "버터로그",
+    "mapUrl": "https://naver.me/xnhLQL3M",
+    "menu": {
+      "아메리카노(Hot)": {
+        "price": 3000,
+        "category": "아메리카노"
+      },
+      "아메리카노(Iced)": {
+        "price": 3000,
+        "category": "아메리카노"
+      },
+      "소금빵": {
+        "price": 2800,
+        "category": "소금빵"
+      },
+      "카페라떼(HOT)": {
+        "price": 3500,
+        "category": "카페라떼"
+      },
+      "카페라떼(ICE)": {
+        "price": 4000,
+        "category": "카페라떼"
+      },
+      "바닐라라떼(HOT)": {
+        "price": 4000,
+        "category": "바닐라라떼"
+      },
+      "바닐라라떼(ICE)": {
+        "price": 4500,
+        "category": "바닐라라떼"
+      },
+      "초코라떼(H)": {
+        "price": 4000,
+        "category": "초코라떼"
+      },
+      "초코라떼(I)": {
+        "price": 4500,
+        "category": "초코라떼"
+      }
+    }
+  },
+  {
+    "brand": "카페 시와",
+    "mapUrl": "https://naver.me/FPn5wfA3",
+    "menu": {
+      "바스크 치즈케이크": {
+        "price": 6500,
+        "category": "치즈케이크"
+      },
+      "바닐라빈 라떼": {
+        "price": 6000,
+        "category": "바닐라라떼"
+      }
+    }
+  },
+  {
+    "brand": "MIRROR",
+    "mapUrl": "https://naver.me/x5G9z9Hp",
+    "menu": {
+      "아메리카노": {
+        "price": 4000,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 5000,
+        "category": "카페라떼"
+      },
+      "바닐라빈라떼": {
+        "price": 5500,
+        "category": "바닐라라떼"
+      },
+      "발로나초코라떼": {
+        "price": 6000,
+        "category": "초코라떼"
+      },
+      "바스크치즈케이크": {
+        "price": 7000,
+        "category": "치즈케이크"
+      }
+    }
+  },
+  {
+    "brand": "맬크",
+    "mapUrl": "https://naver.me/FsRY7xfQ",
+    "menu": {
+      "아메리카노": {
+        "price": 4000,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 4800,
+        "category": "카페라떼"
+      },
+      "바닐라 라떼": {
+        "price": 5800,
+        "category": "바닐라라떼"
+      },
+      "아이스티": {
+        "price": 5500,
+        "category": "아이스티"
+      },
+      "초코라떼": {
+        "price": 6000,
+        "category": "초코라떼"
+      }
+    }
+  },
+  {
+    "brand": "카페옆에",
+    "mapUrl": "https://naver.me/FtGCOZVp",
+    "menu": {
+      "아메리카노(hot)": {
+        "price": 5000,
+        "category": "아메리카노"
+      },
+      "아메리카노(ice)": {
+        "price": 6000,
+        "category": "아메리카노"
+      },
+      "카페라떼(hot)": {
+        "price": 6000,
+        "category": "카페라떼"
+      },
+      "카페라떼(ice)": {
+        "price": 7000,
+        "category": "카페라떼"
+      },
+      "핫초코": {
+        "price": 6000,
+        "category": "초코라떼"
+      }
+    }
+  },
+  {
+    "brand": "백억커피",
+    "mapUrl": "https://naver.me/GiaPEgCf",
+    "menu": {
+      "아메리카노": {
+        "price": 1900,
+        "category": "아메리카노"
+      },
+      "(1L)백억카노": {
+        "price": 2900,
+        "category": "기타"
+      },
+      "카페라떼": {
+        "price": 3900,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 4400,
+        "category": "바닐라라떼"
+      },
+      "초코 라떼": {
+        "price": 4400,
+        "category": "초코라떼"
+      },
+      "(1L)초코 라떼": {
+        "price": 5900,
+        "category": "초코라떼"
+      },
+      "찐 딸기 우유": {
+        "price": 4400,
+        "category": "딸기라떼"
+      },
+      "플레인 요거트 스무디": {
+        "price": 4400,
+        "category": "요거트스무디"
+      },
+      "복숭아 아이스티": {
+        "price": 3400,
+        "category": "아이스티"
+      },
+      "(1L)복숭아 아이스티": {
+        "price": 4400,
+        "category": "아이스티"
+      },
+      "까망베르 치즈 케이크": {
+        "price": 6000,
+        "category": "기타"
+      },
+      "버터 소금빵": {
+        "price": 4000,
+        "category": "소금빵"
+      }
+    }
+  },
+  {
+    "brand": "맘콩",
+    "mapUrl": "https://naver.me/53le9Omt",
+    "menu": {
+      "아메리카노": {
+        "price": 3900,
+        "category": "아메리카노"
+      },
+      "소금빵": {
+        "price": 3400,
+        "category": "소금빵"
+      },
+      "카페라떼": {
+        "price": 4400,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 4900,
+        "category": "바닐라라떼"
+      },
+      "초코라떼": {
+        "price": 4400,
+        "category": "초코라떼"
+      },
+      "요거트 스무디": {
+        "price": 4900,
+        "category": "요거트스무디"
+      },
+      "아이스티": {
+        "price": 3900,
+        "category": "아이스티"
+      },
+      "딸기라떼": {
+        "price": 4400,
+        "category": "딸기라떼"
+      }
+    }
+  },
+  {
+    "brand": "매머드익스프레스",
+    "mapUrl": "https://map.naver.com/p/search/%EB%A7%A4%EB%A8%B8%EB%93%9C%EC%9D%B5%EC%8A%A4%ED%94%84%EB%A0%88%EC%8A%A4?c=14.35,0,0,0,dh",
+    "menu": {
+      "(M) 아메리카노": {
+        "price": 1600,
+        "category": "아메리카노"
+      },
+      "딸기라떼": {
+        "price": 4500,
+        "category": "딸기라떼"
+      },
+      "(L) 아메리카노": {
+        "price": 3000,
+        "category": "아메리카노"
+      },
+      "(M) 카페라떼": {
+        "price": 2700,
+        "category": "카페라떼"
+      },
+      "(L) 카페라떼": {
+        "price": 4800,
+        "category": "카페라떼"
+      },
+      "(M) 초코라떼": {
+        "price": 2900,
+        "category": "초코라떼"
+      },
+      "(L) 초코라떼": {
+        "price": 4800,
+        "category": "초코라떼"
+      },
+      "(M) 아이스티": {
+        "price": 3000,
+        "category": "아이스티"
+      },
+      "(L) 아이스티": {
+        "price": 4000,
+        "category": "아이스티"
+      },
+      "요거트스무디": {
+        "price": 3900,
+        "category": "요거트스무디"
+      },
+      "(M) 바닐라라떼": {
+        "price": 3100,
+        "category": "바닐라라떼"
+      },
+      "(L) 바닐라라떼": {
+        "price": 5200,
+        "category": "바닐라라떼"
+      }
+    }
+  },
+  {
+    "brand": "카페 노니다",
+    "mapUrl": "https://naver.me/GI3E5onc",
+    "menu": {
+      "소금빵": {
+        "price": 2800,
+        "category": "소금빵"
+      },
+      "아메리카노": {
+        "price": 2500,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 3500,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 4000,
+        "category": "바닐라라떼"
+      },
+      "아이스티": {
+        "price": 4000,
+        "category": "아이스티"
+      }
+    }
+  },
+  {
+    "brand": "파리바게뜨",
+    "mapUrl": "https://map.naver.com/p/search/%ED%8C%8C%EB%A6%AC%EB%B0%94%EA%B2%8C%EB%9C%A8?c=16.13,0,0,0,dh",
+    "menu": {
+      "아메리카노": {
+        "price": 3500,
+        "category": "아메리카노"
+      },
+      "아이스카페라떼": {
+        "price": 4500,
+        "category": "카페라떼"
+      },
+      "복숭아 아이스티": {
+        "price": 3100,
+        "category": "아이스티"
+      },
+      "바닐라라떼": {
+        "price": 4500,
+        "category": "바닐라라떼"
+      },
+      "아이스아메리카노": {
+        "price": 4000,
+        "category": "아메리카노"
+      },
+      "아이스바닐라라떼": {
+        "price": 5000,
+        "category": "바닐라라떼"
+      },
+      "카페라떼": {
+        "price": 4000,
+        "category": "카페라떼"
+      },
+      "발효버터 소금빵": {
+        "price": 3200,
+        "category": "소금빵"
+      }
+    }
+  },
+  {
+    "brand": "펠어커피",
+    "mapUrl": "https://naver.me/xJiOURHG",
+    "menu": {
+      "아메리카노": {
+        "price": 3000,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 3500,
+        "category": "카페라떼"
+      },
+      "초콜릿라떼": {
+        "price": 4500,
+        "category": "기타"
+      },
+      "바스크치즈케이크": {
+        "price": 5000,
+        "category": "치즈케이크"
+      },
+      "딸기라떼": {
+        "price": 4500,
+        "category": "딸기라떼"
+      },
+      "바닐라빈라떼": {
+        "price": 4000,
+        "category": "바닐라라떼"
+      },
+      "플레인요거트스무디": {
+        "price": 4500,
+        "category": "요거트스무디"
+      },
+      "복숭아 아이스티": {
+        "price": 3000,
+        "category": "아이스티"
+      }
+    }
+  },
+  {
+    "brand": "카페 올리브",
+    "mapUrl": "https://naver.me/5apTplda",
+    "menu": {
+      "아메리카노": {
+        "price": 3800,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 4500,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 4800,
+        "category": "바닐라라떼"
+      },
+      "딸기라떼": {
+        "price": 5000,
+        "category": "딸기라떼"
+      },
+      "핫초코": {
+        "price": 4800,
+        "category": "초코라떼"
+      },
+      "복숭아 아이스티": {
+        "price": 4300,
+        "category": "아이스티"
+      }
+    }
+  },
+  {
+    "brand": "각자의취향",
+    "mapUrl": "https://naver.me/Fy2J8Dhv",
+    "menu": {
+      "아메리카노": {
+        "price": 3500,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 4000,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 4500,
+        "category": "바닐라라떼"
+      },
+      "초코라떼": {
+        "price": 4500,
+        "category": "초코라떼"
+      }
+    }
+  },
+  {
+    "brand": "빽다방",
+    "mapUrl": "https://map.naver.com/p/search/%EB%B9%BD%EB%8B%A4%EB%B0%A9?c=15.34,0,0,0,dh",
+    "menu": {
+      "아메리카노(H)": {
+        "price": 2000,
+        "category": "아메리카노"
+      },
+      "아메리카노(ICED)": {
+        "price": 2300,
+        "category": "아메리카노"
+      },
+      "카페라떼(H&I)": {
+        "price": 3700,
+        "category": "카페라떼"
+      },
+      "바닐라라떼(H&I)": {
+        "price": 4200,
+        "category": "바닐라라떼"
+      },
+      "빽사이즈 아메리카노(I)": {
+        "price": 3800,
+        "category": "아메리카노"
+      },
+      "빽사이즈 카페라떼(I)": {
+        "price": 5300,
+        "category": "카페라떼"
+      },
+      "빽사이즈 초코라떼(I)": {
+        "price": 5500,
+        "category": "초코라떼"
+      },
+      "딸기라떼(I)": {
+        "price": 4300,
+        "category": "딸기라떼"
+      },
+      "초코라떼(H&I)": {
+        "price": 4000,
+        "category": "초코라떼"
+      },
+      "달콤아이스티(I)": {
+        "price": 3300,
+        "category": "아이스티"
+      },
+      "플레인요거트스무디": {
+        "price": 4000,
+        "category": "요거트스무디"
+      },
+      "고메버터소금빵": {
+        "price": 3500,
+        "category": "소금빵"
+      }
+    }
+  },
+  {
+    "brand": "투썸플레이스",
+    "mapUrl": "https://naver.me/GDa24jcn",
+    "menu": {
+      "아메리카노": {
+        "price": 4100,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 4600,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 5100,
+        "category": "바닐라라떼"
+      },
+      "뉴욕 치즈케이크": {
+        "price": 5700,
+        "category": "치즈케이크"
+      },
+      "아이스 초콜릿": {
+        "price": 4500,
+        "category": "기타"
+      },
+      "요거 프라페": {
+        "price": 5800,
+        "category": "기타"
+      }
+    }
+  },
+  {
+    "brand": "스타벅스",
+    "mapUrl": "https://map.naver.com/p/search/%EC%8A%A4%ED%83%80%EB%B2%85%EC%8A%A4?c=15.55,0,0,0,dh",
+    "menu": {
+      "카페 아메리카노": {
+        "price": 4700,
+        "category": "아메리카노"
+      },
+      "카페 라떼": {
+        "price": 5200,
+        "category": "기타"
+      },
+      "시그니처 핫 초콜릿": {
+        "price": 5900,
+        "category": "기타"
+      },
+      "스타벅스 딸기라떼": {
+        "price": 6500,
+        "category": "딸기라떼"
+      },
+      "복숭아 아이스티": {
+        "price": 6100,
+        "category": "아이스티"
+      },
+      "블론드 바닐라 스타벅스 더블 샷": {
+        "price": 5300,
+        "category": "바닐라라떼"
+      },
+      "프렌치 바닐라 라떼": {
+        "price": 6500,
+        "category": "바닐라라떼"
+      },
+      "클라우드 치즈 케이크": {
+        "price": 5500,
+        "category": "기타"
+      },
+      "소금빵": {
+        "price": 3400,
+        "category": "소금빵"
+      }
+    }
+  },
+  {
+    "brand": "컴포즈커피",
+    "mapUrl": "https://naver.me/xRhDrieL",
+    "menu": {
+      "빅포즈 아메리카노": {
+        "price": 3500,
+        "category": "아메리카노"
+      },
+      "아메리카노": {
+        "price": 2000,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 3400,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 3800,
+        "category": "바닐라라떼"
+      },
+      "더블초코라떼": {
+        "price": 4000,
+        "category": "초코라떼"
+      },
+      "딸기라떼": {
+        "price": 4300,
+        "category": "딸기라떼"
+      },
+      "플레인요거트스무디": {
+        "price": 4500,
+        "category": "요거트스무디"
+      },
+      "아이스티": {
+        "price": 3500,
+        "category": "아이스티"
+      },
+      "빅포즈 아이스티": {
+        "price": 4400,
+        "category": "아이스티"
+      },
+      "이즈니버터소금빵": {
+        "price": 3300,
+        "category": "소금빵"
+      }
+    }
+  },
+  {
+    "brand": "공차",
+    "mapUrl": "https://naver.me/x0UBx4fm",
+    "menu": {
+      "아메리카노": {
+        "price": 3700,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 4200,
+        "category": "카페라떼"
+      },
+      "바닐라 카페라떼": {
+        "price": 4500,
+        "category": "카페라떼"
+      }
+    }
+  },
+  {
+    "brand": "하이오커피",
+    "mapUrl": "https://naver.me/5qDF35ld",
+    "menu": {
+      "아메리카노": {
+        "price": 2000,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 2800,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 3300,
+        "category": "바닐라라떼"
+      },
+      "딸기 라떼": {
+        "price": 3500,
+        "category": "딸기라떼"
+      },
+      "초코 라떼": {
+        "price": 3500,
+        "category": "초코라떼"
+      },
+      "플레인 요거트 스무디": {
+        "price": 3900,
+        "category": "요거트스무디"
+      },
+      "아이스티 복숭아": {
+        "price": 3000,
+        "category": "아이스티"
+      }
+    }
+  },
+  {
+    "brand": "유목커피바",
+    "mapUrl": "https://naver.me/GKUJR3KM",
+    "menu": {
+      "아메리카노": {
+        "price": 5000,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 5500,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 6000,
+        "category": "바닐라라떼"
+      }
+    }
+  },
+  {
+    "brand": "버터에뜨",
+    "mapUrl": "https://naver.me/xExWcaBL",
+    "menu": {
+      "아메리카노": {
+        "price": 4000,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 4500,
+        "category": "카페라떼"
+      },
+      "초코라떼": {
+        "price": 5000,
+        "category": "초코라떼"
+      },
+      "리얼 딸기라떼": {
+        "price": 5000,
+        "category": "딸기라떼"
+      },
+      "바닐라라떼": {
+        "price": 5000,
+        "category": "바닐라라떼"
+      },
+      "미니 바스크 치즈 케이크": {
+        "price": 12000,
+        "category": "기타"
+      },
+      "바스크 치즈 조각 케이크": {
+        "price": 6500,
+        "category": "기타"
+      }
+    }
+  },
+  {
+    "brand": "안다미로 팬케이크",
+    "mapUrl": "https://naver.me/5bVsSDMv",
+    "menu": {
+      "아메리카노": {
+        "price": 4500,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 4500,
+        "category": "카페라떼"
+      },
+      "바닐라빈라떼": {
+        "price": 6000,
+        "category": "바닐라라떼"
+      },
+      "안다미로 초코": {
+        "price": 6000,
+        "category": "초코라떼"
+      }
+    }
+  },
+  {
+    "brand": "하우투",
+    "mapUrl": "https://naver.me/5tJ1lKGT",
+    "menu": {
+      "아메리카노": {
+        "price": 3500,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 4000,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 4500,
+        "category": "바닐라라떼"
+      },
+      "초코라떼(H)": {
+        "price": 5000,
+        "category": "초코라떼"
+      },
+      "초코라떼(I)": {
+        "price": 5500,
+        "category": "초코라떼"
+      }
+    }
+  },
+  {
+    "brand": "메가MGC커피",
+    "mapUrl": "https://map.naver.com/p/search/%EB%A9%94%EA%B0%80mgc%EC%BB%A4%ED%94%BC?c=15.01,0,0,0,dh",
+    "menu": {
+      "아메리카노(HOT)": {
+        "price": 1500,
+        "category": "아메리카노"
+      },
+      "아메리카노(ICED)": {
+        "price": 2000,
+        "category": "아메리카노"
+      },
+      "바닐라라떼": {
+        "price": 3200,
+        "category": "바닐라라떼"
+      },
+      "메가리카노": {
+        "price": 3000,
+        "category": "기타"
+      },
+      "카페라떼": {
+        "price": 2700,
+        "category": "카페라떼"
+      },
+      "복숭아 아이스티": {
+        "price": 3000,
+        "category": "아이스티"
+      },
+      "딸기라떼": {
+        "price": 3500,
+        "category": "딸기라떼"
+      },
+      "핫초코/아이스초코": {
+        "price": 3200,
+        "category": "초코라떼"
+      },
+      "요거트스무디": {
+        "price": 3900,
+        "category": "요거트스무디"
+      },
+      "치즈케익": {
+        "price": 3500,
+        "category": "기타"
+      },
+      "버터버터소금빵": {
+        "price": 3200,
+        "category": "소금빵"
+      }
+    }
+  },
+  {
+    "brand": "플러스82",
+    "mapUrl": "https://naver.me/FN7FjhX5",
+    "menu": {
+      "제로 복숭아 아이스티": {
+        "price": 5000,
+        "category": "아이스티"
+      },
+      "아메리카노": {
+        "price": 4000,
+        "category": "아메리카노"
+      },
+      "번트치즈케이크": {
+        "price": 7000,
+        "category": "치즈케이크"
+      },
+      "카페라떼": {
+        "price": 4800,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 5300,
+        "category": "바닐라라떼"
+      },
+      "초코라떼": {
+        "price": 5300,
+        "category": "초코라떼"
+      },
+      "얼음없이딸기라떼": {
+        "price": 10500,
+        "category": "딸기라떼"
+      },
+      "수제딸기라떼": {
+        "price": 6000,
+        "category": "딸기라떼"
+      },
+      "아이스티": {
+        "price": 4500,
+        "category": "아이스티"
+      },
+      "플레인요거트스무디": {
+        "price": 6000,
+        "category": "요거트스무디"
+      }
+    }
+  },
+  {
+    "brand": "로제또",
+    "mapUrl": "https://naver.me/IxsYt9bF",
+    "menu": {
+      "아메리카노": {
+        "price": 2500,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 3500,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 4000,
+        "category": "바닐라라떼"
+      },
+      "초코라떼": {
+        "price": 3800,
+        "category": "초코라떼"
+      },
+      "복숭아 아이스티": {
+        "price": 2500,
+        "category": "아이스티"
+      },
+      "플레인 요거트 스무디": {
+        "price": 4500,
+        "category": "요거트스무디"
+      },
+      "치즈 케이크": {
+        "price": 6000,
+        "category": "기타"
+      }
+    }
+  },
+  {
+    "brand": "와플앨리",
+    "mapUrl": "https://naver.me/GgW8M9kv",
+    "menu": {
+      "아메리카노": {
+        "price": 4500,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 5000,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 5500,
+        "category": "바닐라라떼"
+      },
+      "요거트 쉐이크": {
+        "price": 6800,
+        "category": "요거트스무디"
+      },
+      "아이스티": {
+        "price": 4500,
+        "category": "아이스티"
+      }
+    }
+  },
+  {
+    "brand": "강또커피",
+    "mapUrl": "https://naver.me/5M5o1U7I",
+    "menu": {
+      "아메리카노": {
+        "price": 3300,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 3800,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 4200,
+        "category": "바닐라라떼"
+      },
+      "초코라떼": {
+        "price": 4000,
+        "category": "초코라떼"
+      },
+      "딸기라떼": {
+        "price": 4000,
+        "category": "딸기라떼"
+      }
+    }
+  },
+  {
+    "brand": "바스켓테이블",
+    "mapUrl": "https://naver.me/GJTosE5d",
+    "menu": {
+      "아메리카노": {
+        "price": 4500,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 5000,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 5800,
+        "category": "바닐라라떼"
+      },
+      "복숭아 아이스티": {
+        "price": 4500,
+        "category": "아이스티"
+      },
+      "레어치즈케이크(한판)": {
+        "price": 35000,
+        "category": "치즈케이크"
+      }
+    }
+  },
+  {
+    "brand": "팀홀튼",
+    "mapUrl": "https://naver.me/IgJGiTLr",
+    "menu": {
+      "아메리카노": {
+        "price": 4000,
+        "category": "아메리카노"
+      },
+      "프렌치 바닐라 라떼": {
+        "price": 5900,
+        "category": "바닐라라떼"
+      },
+      "아이스 카페 라떼": {
+        "price": 4600,
+        "category": "기타"
+      },
+      "메이플 소금빵": {
+        "price": 3800,
+        "category": "소금빵"
+      }
+    }
+  },
+  {
+    "brand": "차차커피코",
+    "mapUrl": "https://naver.me/G65JZNxC",
+    "menu": {
+      "아메리카노": {
+        "price": 2000,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 3200,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 3800,
+        "category": "바닐라라떼"
+      },
+      "초코라떼": {
+        "price": 3500,
+        "category": "초코라떼"
+      },
+      "꿀 딸기라떼": {
+        "price": 3900,
+        "category": "딸기라떼"
+      },
+      "요거트 스무디": {
+        "price": 4300,
+        "category": "요거트스무디"
+      },
+      "아이스티": {
+        "price": 3000,
+        "category": "아이스티"
+      },
+      "바스크 치즈케이크": {
+        "price": 5800,
+        "category": "치즈케이크"
+      }
+    }
+  },
+  {
+    "brand": "카페 뮬",
+    "mapUrl": "https://naver.me/GV2t0Mlq",
+    "menu": {
+      "아메리카노": {
+        "price": 5500,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 5800,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 6300,
+        "category": "바닐라라떼"
+      },
+      "초코라떼": {
+        "price": 5800,
+        "category": "초코라떼"
+      },
+      "리얼딸기라떼": {
+        "price": 6500,
+        "category": "딸기라떼"
+      }
+    }
+  },
+  {
+    "brand": "Los Dias",
+    "mapUrl": "https://naver.me/x0UxKTAZ",
+    "menu": {
+      "소금빵": {
+        "price": 4500,
+        "category": "소금빵"
+      },
+      "아메리카노": {
+        "price": 4700,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 5500,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 5800,
+        "category": "바닐라라떼"
+      },
+      "딸기라떼": {
+        "price": 6500,
+        "category": "딸기라떼"
+      },
+      "초코라떼": {
+        "price": 6500,
+        "category": "초코라떼"
+      }
+    }
+  },
+  {
+    "brand": "까쉬",
+    "mapUrl": "https://naver.me/xWTY54N8",
+    "menu": {
+      "치즈케이크": {
+        "price": 7000,
+        "category": "치즈케이크"
+      },
+      "아메리카노": {
+        "price": 4800,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 5500,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 5800,
+        "category": "바닐라라떼"
+      },
+      "초코라떼": {
+        "price": 6500,
+        "category": "초코라떼"
+      }
+    }
+  },
+  {
+    "brand": "아마스빈",
+    "mapUrl": "https://naver.me/xIeR9Vzs",
+    "menu": {
+      "점보 아메리카노(H)": {
+        "price": 1500,
+        "category": "아메리카노"
+      },
+      "점보 아메리카노(I)": {
+        "price": 1800,
+        "category": "아메리카노"
+      },
+      "점보 카페라떼": {
+        "price": 2900,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 3300,
+        "category": "바닐라라떼"
+      }
+    }
+  },
+  {
+    "brand": "마스터빈스커피",
+    "mapUrl": "https://naver.me/FQVJPalk",
+    "menu": {
+      "아메리카노": {
+        "price": 2500,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 3500,
+        "category": "카페라떼"
+      },
+      "복숭아아이스티": {
+        "price": 3000,
+        "category": "아이스티"
+      },
+      "밀크초코라떼": {
+        "price": 3500,
+        "category": "초코라떼"
+      }
+    }
+  },
+  {
+    "brand": "루틴",
+    "mapUrl": "https://naver.me/5neztPKO",
+    "menu": {
+      "아메리카노": {
+        "price": 5000,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 5500,
+        "category": "카페라떼"
+      },
+      "바닐라빈라떼": {
+        "price": 6500,
+        "category": "바닐라라떼"
+      },
+      "크림초코": {
+        "price": 6500,
+        "category": "초코라떼"
+      },
+      "아이스티": {
+        "price": 6500,
+        "category": "아이스티"
+      }
+    }
+  },
+  {
+    "brand": "RONDO",
+    "mapUrl": "https://naver.me/5Bclv73g",
+    "menu": {
+      "아메리카노": {
+        "price": 2000,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 3000,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 3500,
+        "category": "바닐라라떼"
+      },
+      "아이스티": {
+        "price": 3000,
+        "category": "아이스티"
+      },
+      "딸기라떼": {
+        "price": 4000,
+        "category": "딸기라떼"
+      },
+      "요거트스무디": {
+        "price": 4000,
+        "category": "요거트스무디"
+      }
+    }
+  },
+  {
+    "brand": "시샘달 아뜰리에",
+    "mapUrl": "https://naver.me/5XJyz0Ht",
+    "menu": {
+      "아메리카노": {
+        "price": 4500,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 5500,
+        "category": "카페라떼"
+      },
+      "바닐라빈 라떼": {
+        "price": 6000,
+        "category": "바닐라라떼"
+      },
+      "초콜릿 라떼": {
+        "price": 6500,
+        "category": "기타"
+      },
+      "딸기 라떼": {
+        "price": 6800,
+        "category": "딸기라떼"
+      }
+    }
+  },
+  {
+    "brand": "무드앤커피",
+    "mapUrl": "https://naver.me/F2Z9HVwb",
+    "menu": {
+      "아메리카노": {
+        "price": 4000,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 4500,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 5500,
+        "category": "바닐라라떼"
+      },
+      "초코라떼": {
+        "price": 5000,
+        "category": "초코라떼"
+      },
+      "딸기라떼": {
+        "price": 5500,
+        "category": "딸기라떼"
+      },
+      "아이스티": {
+        "price": 4000,
+        "category": "아이스티"
+      },
+      "수제 바스크 치즈 케이크": {
+        "price": 5300,
+        "category": "기타"
+      }
+    }
+  },
+  {
+    "brand": "스파츠",
+    "mapUrl": "https://naver.me/5ssTnWyf",
+    "menu": {
+      "코코아": {
+        "price": 6000,
+        "category": "기타"
+      },
+      "아메리카노": {
+        "price": 4000,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 4500,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 5500,
+        "category": "바닐라라떼"
+      },
+      "아이스티": {
+        "price": 3500,
+        "category": "아이스티"
+      }
+    }
+  },
+  {
+    "brand": "카페온더플랜",
+    "mapUrl": "https://naver.me/xnrlBhtm",
+    "menu": {
+      "아메리카노": {
+        "price": 4800,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 5300,
+        "category": "카페라떼"
+      },
+      "바닐라빈 라떼": {
+        "price": 5800,
+        "category": "바닐라라떼"
+      },
+      "다크초코": {
+        "price": 5300,
+        "category": "초코라떼"
+      },
+      "아이스티": {
+        "price": 5300,
+        "category": "아이스티"
+      },
+      "수제요거트 스무디": {
+        "price": 6500,
+        "category": "요거트스무디"
+      }
+    }
+  },
+  {
+    "brand": "문샤워",
+    "mapUrl": "https://naver.me/FzSqTVVy",
+    "menu": {
+      "아메리카노": {
+        "price": 3000,
+        "category": "아메리카노"
+      },
+      "바닐라라떼": {
+        "price": 4500,
+        "category": "바닐라라떼"
+      },
+      "카페라떼": {
+        "price": 4000,
+        "category": "카페라떼"
+      },
+      "딸기라떼": {
+        "price": 5000,
+        "category": "딸기라떼"
+      },
+      "초코라떼": {
+        "price": 4500,
+        "category": "초코라떼"
+      }
+    }
+  },
+  {
+    "brand": "만리동커피",
+    "mapUrl": "https://naver.me/58Nb9oFN",
+    "menu": {
+      "아메리카노": {
+        "price": 3000,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 4000,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 4500,
+        "category": "바닐라라떼"
+      },
+      "초콜렛라떼": {
+        "price": 4500,
+        "category": "기타"
+      },
+      "아이스티": {
+        "price": 3500,
+        "category": "아이스티"
+      }
+    }
+  },
+  {
+    "brand": "카페 헤더그로브",
+    "mapUrl": "https://naver.me/GL80nkLe",
+    "menu": {
+      "아메리카노": {
+        "price": 4500,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 5000,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 5500,
+        "category": "바닐라라떼"
+      },
+      "아이스티": {
+        "price": 6000,
+        "category": "아이스티"
+      },
+      "딸기라떼": {
+        "price": 8000,
+        "category": "딸기라떼"
+      },
+      "리얼다크초콜릿(hot)": {
+        "price": 7500,
+        "category": "기타"
+      }
+    }
+  },
+  {
+    "brand": "모리커피",
+    "mapUrl": "https://naver.me/FeX8i5RJ",
+    "menu": {
+      "아메리카노": {
+        "price": 1800,
+        "category": "아메리카노"
+      },
+      "딸기라떼": {
+        "price": 4000,
+        "category": "딸기라떼"
+      },
+      "카페라떼": {
+        "price": 3200,
+        "category": "카페라떼"
+      },
+      "번트치즈케이크": {
+        "price": 5000,
+        "category": "치즈케이크"
+      },
+      "(1L)아메리카노": {
+        "price": 3400,
+        "category": "아메리카노"
+      },
+      "(1L)카페라떼": {
+        "price": 5500,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 3500,
+        "category": "바닐라라떼"
+      },
+      "(1L)바닐라라떼": {
+        "price": 5800,
+        "category": "바닐라라떼"
+      },
+      "(1L)딸기라떼": {
+        "price": 7000,
+        "category": "딸기라떼"
+      },
+      "초코라떼": {
+        "price": 4000,
+        "category": "초코라떼"
+      }
+    }
+  },
+  {
+    "brand": "카페구월",
+    "mapUrl": "https://naver.me/5D84qJqc",
+    "menu": {
+      "아메리카노": {
+        "price": 5000,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 5300,
+        "category": "카페라떼"
+      },
+      "딸기라떼": {
+        "price": 5500,
+        "category": "딸기라떼"
+      },
+      "바닐라라떼": {
+        "price": 5800,
+        "category": "바닐라라떼"
+      },
+      "아이스티": {
+        "price": 5000,
+        "category": "아이스티"
+      },
+      "플레인요거트스무디": {
+        "price": 6300,
+        "category": "요거트스무디"
+      }
+    }
+  },
+  {
+    "brand": "김Coffee",
+    "mapUrl": "https://naver.me/GdypHvdd",
+    "menu": {
+      "아메리카노(hot)": {
+        "price": 3500,
+        "category": "아메리카노"
+      },
+      "아메리카노(ice)": {
+        "price": 4000,
+        "category": "아메리카노"
+      },
+      "카페라떼(hot)": {
+        "price": 4000,
+        "category": "카페라떼"
+      },
+      "카페라떼(ice)": {
+        "price": 4500,
+        "category": "카페라떼"
+      },
+      "바닐라카페라떼(hot)": {
+        "price": 4000,
+        "category": "카페라떼"
+      },
+      "바닐라카페라떼(ice)": {
+        "price": 4500,
+        "category": "카페라떼"
+      },
+      "초코라떼(hot)": {
+        "price": 4000,
+        "category": "초코라떼"
+      },
+      "초코라떼(ice)": {
+        "price": 4500,
+        "category": "초코라떼"
+      },
+      "아이스티": {
+        "price": 4000,
+        "category": "아이스티"
+      },
+      "플레인요거트스무디": {
+        "price": 4500,
+        "category": "요거트스무디"
+      },
+      "치즈케이크": {
+        "price": 4000,
+        "category": "치즈케이크"
+      }
+    }
+  },
+  {
+    "brand": "왓플",
+    "mapUrl": "https://naver.me/5tfUNSmz",
+    "menu": {
+      "아메리카노": {
+        "price": 4000,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 4500,
+        "category": "카페라떼"
+      },
+      "바닐라빈라떼": {
+        "price": 4800,
+        "category": "바닐라라떼"
+      },
+      "더블초코": {
+        "price": 5500,
+        "category": "초코라떼"
+      },
+      "아이스티": {
+        "price": 4000,
+        "category": "아이스티"
+      },
+      "딸기우유": {
+        "price": 5800,
+        "category": "딸기라떼"
+      },
+      "요거트 라씨": {
+        "price": 5800,
+        "category": "요거트스무디"
+      }
+    }
+  },
+  {
+    "brand": "아아수혈",
+    "mapUrl": "https://naver.me/xjgcFoY4",
+    "menu": {
+      "아메리카노": {
+        "price": 3500,
+        "category": "아메리카노"
+      },
+      "딸기라떼": {
+        "price": 5500,
+        "category": "딸기라떼"
+      },
+      "카페라떼": {
+        "price": 4600,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 4800,
+        "category": "바닐라라떼"
+      },
+      "초코라떼": {
+        "price": 4800,
+        "category": "초코라떼"
+      },
+      "아이스티": {
+        "price": 4000,
+        "category": "아이스티"
+      },
+      "플레인요거트": {
+        "price": 5500,
+        "category": "요거트스무디"
+      }
+    }
+  },
+  {
+    "brand": "모블러",
+    "mapUrl": "https://naver.me/xyTRdaap",
+    "menu": {
+      "아메리카노": {
+        "price": 3500,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 4000,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 4200,
+        "category": "바닐라라떼"
+      },
+      "클래식 코코아": {
+        "price": 5000,
+        "category": "기타"
+      }
+    }
+  },
+  {
+    "brand": "로스터리선호",
+    "mapUrl": "https://naver.me/5gF9ulBT",
+    "menu": {
+      "아메리카노": {
+        "price": 3500,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 4000,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 5000,
+        "category": "바닐라라떼"
+      },
+      "초콜릿 밀크": {
+        "price": 5500,
+        "category": "기타"
+      },
+      "복숭아 아이스티": {
+        "price": 5000,
+        "category": "아이스티"
+      }
+    }
+  },
+  {
+    "brand": "버터룸",
+    "mapUrl": "https://naver.me/FHV3D6ch",
+    "menu": {
+      "아메리카노": {
+        "price": 3500,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 4000,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 4500,
+        "category": "바닐라라떼"
+      }
+    }
+  },
+  {
+    "brand": "리슨투",
+    "mapUrl": "https://naver.me/FHV3D6ch",
+    "menu": {
+      "아메리카노(hot)": {
+        "price": 4000,
+        "category": "아메리카노"
+      },
+      "아메리카노(ice)": {
+        "price": 4000,
+        "category": "아메리카노"
+      },
+      "카페라떼(hot)": {
+        "price": 4500,
+        "category": "카페라떼"
+      },
+      "카페라떼(ice)": {
+        "price": 4500,
+        "category": "카페라떼"
+      },
+      "바닐라라떼(hot)": {
+        "price": 5000,
+        "category": "바닐라라떼"
+      },
+      "바닐라라떼(ice)": {
+        "price": 5000,
+        "category": "바닐라라떼"
+      },
+      "소금빵": {
+        "price": 3000,
+        "category": "소금빵"
+      }
+    }
+  },
+  {
+    "brand": "슬로우브레드파파",
+    "mapUrl": "https://naver.me/xk1PwBtU",
+    "menu": {
+      "아메리카노": {
+        "price": 2500,
+        "category": "아메리카노"
+      },
+      "카페라떼": {
+        "price": 4200,
+        "category": "카페라떼"
+      },
+      "바닐라라떼": {
+        "price": 4500,
+        "category": "바닐라라떼"
+      },
+      "복숭아아이스티": {
+        "price": 2000,
+        "category": "아이스티"
+      },
+      "소금빵": {
+        "price": 3000,
+        "category": "소금빵"
+      }
+    }
+  },
+  {
+    "brand": "베이커리 어썸 피넛",
+    "mapUrl": "https://naver.me/xBw0cZm0",
+    "menu": {
+      "소금빵": {
+        "price": 1800,
+        "category": "소금빵"
+      }
+    }
+  }
+];
+    let currentCategory = "";
+    let currentFilteredCafes = [];
+
+    function startWithMenu(category) {
+      currentCategory = category;
+      document.getElementById("menuGrid").style.display = "none";
+      document.getElementById("menuBar").style.display = "flex";
+      document.getElementById("homeBtn").style.display = "inline-block";
+      document.getElementById("sortBar").style.display = "block";
+      document.getElementById("result-container").style.display = "block";
+      showMenu(category);
+    }
+
+    function goHome() {
+      document.getElementById("menuGrid").style.display = "flex";
+      document.getElementById("menuBar").style.display = "none";
+      document.getElementById("homeBtn").style.display = "none";
+      document.getElementById("sortBar").style.display = "none";
+      document.getElementById("result-container").style.display = "none";
+    }
+
+    function showMenu(category) {
+      const resultContainer = document.getElementById("result-container");
+      resultContainer.innerHTML = "";
+
+      currentFilteredCafes = cafesRaw.map(cafe => {
+        const matchedMenus = Object.entries(cafe.menu).filter(
+          ([name, obj]) => obj.category === category
+        );
+        if (matchedMenus.length === 0) return null;
+        return { ...cafe, matchedMenus };
+      }).filter(Boolean);
+
+      applySort();
+    }
+
+    function applySort() {
+      const sortValue = document.getElementById("sortSelect").value || "default";
+      let sorted = [...currentFilteredCafes];
+
+      if (sortValue === "priceAsc") {
+        sorted.sort((a, b) => {
+          const aMin = Math.min(...a.matchedMenus.map(([_, m]) => m.price));
+          const bMin = Math.min(...b.matchedMenus.map(([_, m]) => m.price));
+          return aMin - bMin;
+        });
+      } else if (sortValue === "priceDesc") {
+        sorted.sort((a, b) => {
+          const aMax = Math.max(...a.matchedMenus.map(([_, m]) => m.price));
+          const bMax = Math.max(...b.matchedMenus.map(([_, m]) => m.price));
+          return bMax - aMax;
+        });
+      } else if (sortValue === "name") {
+        sorted.sort((a, b) => a.brand.localeCompare(b.brand, 'ko'));
+      }
+
+      renderCafes(sorted);
+    }
+
+    function renderCafes(data) {
+      const resultContainer = document.getElementById("result-container");
+      resultContainer.innerHTML = "";
+
+      data.forEach(cafe => {
+        const div = document.createElement("div");
+        div.className = "cafe-card";
+
+        let html = `<div class="cafe-name">${cafe.brand}</div>`;
+        cafe.matchedMenus.forEach(([name, obj]) => {
+          html += `<div class="price">${name}: ${obj.price}원</div>`;
+        });
+        html += `<a class="link" href="${cafe.mapUrl}" target="_blank">지도에서 보기</a>`;
+
+        div.innerHTML = html;
+        resultContainer.appendChild(div);
+      });
+    }
+  </script>
+</body>
+</html>
